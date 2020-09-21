@@ -1,3 +1,7 @@
+## React Hooks Project
+
+Simple project whose purpose is to get accointed with React Hooks
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

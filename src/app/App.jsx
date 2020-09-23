@@ -1,6 +1,6 @@
 import React from 'react';
 import './app.scss';
-import { useState, useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import Header from '../components/Header/Header';
 import Search from '../components/Search/Search';
@@ -19,11 +19,43 @@ const ErrorMessage = (props) => {
   return <div className="errorMessage">{props.errorMessage}</div>;
 };
 
+const initialState = {
+  loading: true,
+  errorMessage: null,
+  movies: [],
+};
+
+const moviesReducer = (state, action) => {
+  switch (action.type) {
+    case 'SEARCH_MOVIES_REQUEST':
+      return {
+        ...state,
+        loading: true,
+        errorMessage: null,
+      };
+
+    case 'SEARCH_MOVIES_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        movies: action.payload,
+      };
+
+    case 'SEARCH_MOVIES_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        errorMessage: action.error,
+      };
+    default:
+      break;
+  }
+};
+
 const App = () => {
-  // Set states
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [movies, setMovies] = useState([]);
+  // Set states with useReducer
+  const [state, dispatch] = useReducer(moviesReducer, initialState);
+  const { loading, errorMessage, movies } = state;
 
   // Fetch info from API and act on it
   const fetchInfo = (url) => {
@@ -33,13 +65,18 @@ const App = () => {
         // If we have a response from our fetch
         if (jsonResponse.Response === 'True') {
           // Update movies state for the fetch response
-          setMovies(jsonResponse.Search);
+          // setMovies(jsonResponse.Search);
+          dispatch({
+            type: 'SEARCH_MOVIES_SUCCESS',
+            payload: jsonResponse.Search,
+          });
         } else {
           // Set error message state
-          setErrorMessage(jsonResponse.Error);
+          dispatch({
+            type: 'SEARCH_MOVIES_FAILURE',
+            error: jsonResponse.Error,
+          });
         }
-        // Stop loading
-        setLoading(false);
       });
   };
 
@@ -55,8 +92,10 @@ const App = () => {
 
   // Search function to fetch new movies
   const search = (searchValue) => {
-    setLoading(true);
-    setErrorMessage(null);
+    // Tell reducer we are requesting movies
+    dispatch({
+      type: 'SEARCH_MOVIES_REQUEST',
+    });
 
     fetchInfo(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`);
   };

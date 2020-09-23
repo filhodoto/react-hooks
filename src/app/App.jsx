@@ -1,10 +1,10 @@
 import React from 'react';
 import './app.scss';
-import Header from '../components/header/Header';
-import Search from '../components/search/Search';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import Movie from '../components/movie/Movie';
+import { useState, useEffect } from 'react';
+
+import Header from '../components/Header/Header';
+import Search from '../components/Search/Search';
+import Movie from '../components/Movie/Movie';
 
 // Url used to fetch information from API
 const MOVIE_API_URL = 'https://www.omdbapi.com/?s=man&apikey=4a3b711b';
@@ -48,10 +48,28 @@ const App = () => {
       });
   }, []);
 
+  // Search function to fetch new movies
+  const search = (searchValue) => {
+    setLoading(true);
+    setErrorMessage(null);
+
+    fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        if (jsonResponse.Response === 'True') {
+          setMovies(jsonResponse.Search);
+          setLoading(false);
+        } else {
+          setErrorMessage(jsonResponse.Error);
+          setLoading(false);
+        }
+      });
+  };
+
   return (
     <div className="app">
       <Header title="Header title" />
-      <Search />
+      <Search search={search} />
       <div className="movies">
         {loading && !errorMessage ? (
           // if there's loading and no error message show loading

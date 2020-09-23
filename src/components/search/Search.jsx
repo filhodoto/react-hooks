@@ -18,7 +18,9 @@ const Search = (props) => {
   const callSearchFunction = (ev) => {
     // prevent default for action
     ev.preventDefault();
-    // send info somewhere
+
+    // Send input text value to search function that got passed via props
+    props.search(searchValue);
 
     // Clean input value
     setSearchValue('');

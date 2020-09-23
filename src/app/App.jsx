@@ -25,18 +25,13 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [movies, setMovies] = useState([]);
 
-  // Fetch info from api on component mount
-  /*   
-  As per React official docs:
-  'think of useEffect Hook as componentDidMount, 
-  componentDidUpdate,and componentWillUnmount combined.');
- */
-  useEffect(() => {
-    fetch(MOVIE_API_URL)
+  // Fetch info from API and act on it
+  const fetchInfo = (url) => {
+    fetch(url)
       .then((response) => response.json())
       .then((jsonResponse) => {
         // If we have a response from our fetch
-        if (jsonResponse.Response) {
+        if (jsonResponse.Response === 'True') {
           // Update movies state for the fetch response
           setMovies(jsonResponse.Search);
         } else {
@@ -46,6 +41,16 @@ const App = () => {
         // Stop loading
         setLoading(false);
       });
+  };
+
+  // Fetch info from api on component mount
+  /*   
+  As per React official docs:
+  'think of useEffect Hook as componentDidMount, 
+  componentDidUpdate,and componentWillUnmount combined.');
+ */
+  useEffect(() => {
+    fetchInfo(MOVIE_API_URL);
   }, []);
 
   // Search function to fetch new movies
@@ -53,17 +58,7 @@ const App = () => {
     setLoading(true);
     setErrorMessage(null);
 
-    fetch(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`)
-      .then((response) => response.json())
-      .then((jsonResponse) => {
-        if (jsonResponse.Response === 'True') {
-          setMovies(jsonResponse.Search);
-          setLoading(false);
-        } else {
-          setErrorMessage(jsonResponse.Error);
-          setLoading(false);
-        }
-      });
+    fetchInfo(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`);
   };
 
   return (

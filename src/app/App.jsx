@@ -2,13 +2,13 @@ import React from 'react';
 import './app.scss';
 import { useEffect, useReducer } from 'react';
 
-import Header from '../components/Header/Header';
-import Search from '../components/Search/Search';
-import Movie from '../components/Movie/Movie';
-import { moviesReducer } from '../state/reducer';
-import { SEARCH_MOVIES_REQUEST } from '../state/actionTypes';
-import { fetchInfo } from '../state/actions';
-import { MOVIE_API_URL } from '../state/config';
+import Header from 'components/Header/Header';
+import Search from 'components/Search/Search';
+import Movie from 'components/Movie/Movie';
+import { moviesReducer } from 'state/reducer';
+import { SEARCH_MOVIES_REQUEST } from 'state/actionTypes';
+import { fetchInfo } from 'state/actions';
+import { CORS_ANYWHERE_HEROKU, MOVIE_API_URL } from 'state/config';
 
 // Loading element
 const Loading = () => {
@@ -49,7 +49,7 @@ const App = () => {
     });
 
     fetchInfo(
-      `https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`,
+      `${CORS_ANYWHERE_HEROKU}https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`,
       dispatch
     );
   };

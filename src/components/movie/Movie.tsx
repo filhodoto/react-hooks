@@ -1,8 +1,16 @@
-import React from 'react';
-import { DEFAULT_PLACEHOLDER_IMAGE } from '../../state/config';
+import React, { FunctionComponent } from 'react';
+import { DEFAULT_PLACEHOLDER_IMAGE } from 'state/config';
 import './movie.scss';
 
-const Movie = ({ movie }) => {
+export interface Movie {
+  Poster: string;
+  Title: string;
+  Type: string;
+  Year: string;
+  imdbID: string;
+}
+
+const Movie: FunctionComponent<{ movie: Movie }> = ({ movie }): JSX.Element => {
   // Get poster image
   const poster =
     movie.Poster === 'N/A' ? DEFAULT_PLACEHOLDER_IMAGE : movie.Poster;

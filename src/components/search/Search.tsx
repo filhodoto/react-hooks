@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useState } from 'react';
 import './search.scss';
 
-const Search = (props) => {
+interface Search {
+  searchFunc: (key: string) => void;
+}
+
+const Search = (props: Search) => {
   /*   
   Set state with useState   
   Structure is:
@@ -10,17 +14,17 @@ const Search = (props) => {
   const [searchValue, setSearchValue] = useState('');
 
   // Handle search input changes
-  const handleSearchInputChanges = (ev) => {
+  const handleSearchInputChanges = (ev: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(ev.target.value);
   };
 
   // Handle search action
-  const callSearchFunction = (ev) => {
+  const callSearchFunction = (ev: MouseEvent<HTMLElement>) => {
     // prevent default for action
     ev.preventDefault();
 
     // Send input text value to search function that got passed via props
-    props.search(searchValue);
+    props.searchFunc(searchValue);
 
     // Clean input value
     setSearchValue('');

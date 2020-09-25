@@ -1,7 +1,9 @@
+import { Dispatch } from 'react';
 import { SEARCH_MOVIES_FAILURE, SEARCH_MOVIES_SUCCESS } from './actionTypes';
+import { Action } from 'app/App';
 
 // Fetch info from API and act on it
-export const fetchInfo = (url, dispatch) => {
+export const fetchInfo = (url: string, dispatch: Dispatch<Action>): void => {
   fetch(url)
     .then((response) => response.json())
     .then((jsonResponse) => {
